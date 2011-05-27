@@ -11,7 +11,7 @@ def parse_www_authenticate(string):
     mechanism = parts[0]
     if len(parts) > 1:
         params = re.split('\s*,\s*', parts[1])
-        params = dict(p.split('=', 1) for p in params)
+        params = dict(p.split('=', 1) if '=' in p else (p, None) for p in params)
     else:
         params = {}
     return mechanism, params
