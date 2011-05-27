@@ -107,7 +107,8 @@ class ApiClient(object):
         If you don't have a consumer key and secret yet and want to develop an
         application that uses the Mobile Vikings API, send a request to
         info@mobilevikings.com. Don't forget to include the name of your
-        application and a short description of its functionality.
+        application, a short description of its functionality and the username
+        of your Mobile Vikings account.
         """
         self.consumer = Consumer(consumer_key, consumer_secret)
         self.client = Client(self.consumer)
