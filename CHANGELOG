@@ -1,0 +1,8 @@
+2011-07-22
+
+ - Added xAuth support.
+ - Renamed config file to .mvoauthapi.cfg
+ - Added -r option to remove config file.
+ - Config file now has mode 0600.
+ - Added InvalidMethod exception.
+ - Improved error detection.

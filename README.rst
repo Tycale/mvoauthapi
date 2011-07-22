@@ -49,6 +49,18 @@ and their arguments.
 
 .. _`API documentation`: http://mobilevikings.com/api/2.0/doc/
 
+If the `xAuth extension`_ has been enabled for your consumer, you can test it by
+passing the ``-x`` option to ``call.py``. You will be prompted for an account's
+username and password instead of being redirected to the Mobile Vikings site.
+Note that xAuth is not enabled by default. If you want to use it, email us at
+mailto:info@mobilevikings.com and explain why your application requires it.
+
+.. _`xAuth extension`: https://dev.twitter.com/docs/oauth/xauth
+
+``call.py`` will store your consumer credentials and tokens in
+``~/.mvoauthapi.cfg`` so you don't have to re-enter your data and go through
+the access token request process each time you make a call.
+
 
 Using the client in your application
 ====================================
@@ -101,6 +113,21 @@ Note: if you don't want to use a redirect to your application's site, omit the
 ``callback`` argument in the ``fetch_request_token`` call. The Mobile Vikings
 API will then display the verification code to the user when access has been
 granted.
+
+xAuth
+-----
+
+Simply call ``fetch_access_token_via_xauth()`` after initializing the
+client. It is imperative that you do *not* store the user's credentials. Use
+them once to request the access token and discard them afterwards. From then
+on, use the access token to make calls.
+
+::
+
+    api = ApiClient(consumer_key, consumer_secret)
+    api.fetch_access_token_via_xauth(username, password)
+    api.get('sim_balance')
+
 
 Re-using an existing access token
 ---------------------------------

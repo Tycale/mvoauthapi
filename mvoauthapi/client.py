@@ -83,9 +83,13 @@ class ApiClient(object):
     >>> api.set_access_token(access_token)
     >>> api.get('sim_balance')
     """
-    PROTOCOL = 'https'
-    HOST = 'mobilevikings.com'
-    PORT = 443
+    # PROTOCOL = 'https'
+    # HOST = 'mobilevikings.com'
+    # PORT = 443
+
+    PROTOCOL = 'http'
+    HOST = '192.168.128.86'
+    PORT = 8000
     VERSION = '2.0'
     FORMAT = 'json'
 
@@ -129,11 +133,21 @@ class ApiClient(object):
             raise errors.AccessDenied(response, content)
         if response['status'] == '400' and 'invalid oauth verifier' in lower:
             raise errors.InvalidVerifier(response, content)
+        if response['status'] == '400' and 'missing oauth parameters' in lower:
+            raise errors.MissingParameters(response, content)
+        if response['status'] == '403' and 'xauth not allowed for this consumer' in lower:
+            raise errors.XAuthNotAllowed(response, content)
+        if response['status'] == '403' and 'xauth username/password combination invalid' in lower:
+            raise errors.XAuthAccessDenied(response, content)
+        if response['status'] == '404':
+            raise errors.InvalidMethod(response, content)
         if response['status'] == '401' and 'www-authenticate' in response:
             www_auth = response['www-authenticate']
             mech, params = parse_www_authenticate(www_auth)
             if mech == 'OAuth' and params.get('realm') == '"Mobile Vikings"':
                 raise errors.AccessTokenExpired(response, content)
+        if response['status'].startswith('4') or response['status'].startswith('5'):
+            raise errors.ApiServerError(response, content)
 
     def _request(self, *args, **kwargs):
         """ Perform an OAuth client request with error detection. """
@@ -206,8 +220,33 @@ class ApiClient(object):
             self.set_access_token(token)
             return token
 
+    def fetch_access_token_via_xauth(self, username, password):
+        """
+        Fetch an access token using the xAuth extension.
+        See: https://dev.twitter.com/docs/oauth/xauth for more info.
+
+        Unlike the regular fetch_access_token(), you can call this method
+        directly after initializing the client.
+        """
+        data = {
+            'x_auth_mode': 'client_auth',
+            'x_auth_username': username,
+            'x_auth_password': password,
+        }
+        response, content = self._request(self.ACCESS_TOKEN_URL,
+            method = 'POST',
+            body = urllib.urlencode(data),
+        )
+        try:
+            token = Token.from_string(content)
+        except ValueError:
+            raise errors.ApiServerError(response, content)
+        else:
+            self.set_access_token(token)
+            return token
+
     def set_access_token(self, token):
-        """ Make the client use a the given access token for its calls. """
+        """ Make the client use the given access token for its calls. """
         self.access_token = token
         self.client = Client(self.consumer, self.access_token)
 
@@ -226,14 +265,16 @@ class ApiClient(object):
         ``format`` (optional): output format of the API.
 
         Note that this method will only succeed if you have successfully
-        request an access token.
+        requested an access token.
 
         Returns a (`response`, `content`) tuple.
         """
+        assert method.upper() in ('GET', 'POST', 'PUT', 'DELETE', 'HEAD')
         if args is None:
             args = {}
         if format is None:
             format = self.format
+        assert format in ('json', 'xml', 'pickle', 'yaml')
         url = self.BASE_URL + path + '.' + format
         if args:
             url += '?' + urllib.urlencode(args)

@@ -28,3 +28,24 @@ class AccessTokenExpired(ApiServerError):
 
 class AccessDenied(ApiServerError):
     pass
+
+
+class XAuthNotAllowed(ApiServerError):
+    """ Application is not allowed to use the xAuth extension.
+        Send a request to info@mobilevikings.com if you are sure
+        you need this feature.
+    """
+    pass
+
+
+class XAuthAccessDenied(ApiServerError):
+    """ Username/password combination is incorrect. """
+    pass
+
+
+class MissingParameters(ApiServerError):
+    pass
+
+
+class InvalidMethod(ApiServerError):
+    pass
