@@ -83,13 +83,9 @@ class ApiClient(object):
     >>> api.set_access_token(access_token)
     >>> api.get('sim_balance')
     """
-    # PROTOCOL = 'https'
-    # HOST = 'mobilevikings.com'
-    # PORT = 443
-
-    PROTOCOL = 'http'
-    HOST = '192.168.128.86'
-    PORT = 8000
+    PROTOCOL = 'https'
+    HOST = 'mobilevikings.com'
+    PORT = 443
     VERSION = '2.0'
     FORMAT = 'json'
 
