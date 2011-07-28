@@ -77,9 +77,6 @@ contains a verification code. The application can then use the verification
 code to request an access token. With this access token, the API calls can
 finally be made.
 
-Example
--------
-
 ::
 
     from mvoauthapi.client import ApiClient, Token
@@ -114,8 +111,8 @@ Note: if you don't want to use a redirect to your application's site, omit the
 API will then display the verification code to the user when access has been
 granted.
 
-xAuth
------
+Using the xAuth extension
+-------------------------
 
 Simply call ``fetch_access_token_via_xauth()`` after initializing the
 client. It is imperative that you do *not* store the user's credentials. Use

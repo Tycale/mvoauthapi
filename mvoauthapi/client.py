@@ -13,75 +13,11 @@ class ApiClient(object):
     """
     OAuth client for the Mobile Vikings API.
 
-    Overview
-    --------
+    Read README.rst for a brief explanation of the OAuth protocol and a
+    tutorial for this client.
 
-    OAuth is an authorization protocol that allows applications (a balance
-    checker on your Android phone, for example) to consume user data from a
-    service provider (the Mobile Vikings API) data without having to know the
-    user's credentials.
-
-    Registering your application
-    ----------------------------
-
-    Before you can call the Mobile Vikings API you should register your
-    application. Send a request to `info@mobilevikings.com`. Don't forget to
-    include the name of your application and a short description of its
-    functionality. We will send you the consumer key and secret you need to
-    initialize the API client.
-
-    Acquiring an access token
-    -------------------------
-
-    The OAuth protocol implements authorization by exchanging tokens. First,
-    the application fetches a request token with a given callback url. Using
-    this token, it can redirect the user to an authorization url on the Mobile
-    Vikings site. On this page, the user is asked if she wants to grant
-    permission to the application. If she does, she is redirected to the
-    callback url that now contains a verification code. The application can
-    then use the verification code to request an access token. With this access
-    token, the API calls can finally be made.
-
-    Example
-    -------
-
-    >>> api = ApiClient(consumer_key, consumer_secret)
-    >>> api.fetch_request_token(callback='http://my-app.com/access_granted')
-    >>> url = api.make_authorization_url()
-
-    Now, redirect the user to the authorization url. If she accepts, she
-    will be redirected to the `access_granted` page of your site. There
-    will be `oauth_verifier` and `oauth_token` GET query parameters present
-    in the URL. Pass them to the client and fetch the access token.
-
-    >>> request_key = request.GET['oauth_token']
-    >>> request_secret = '' # Fetch this from your session or db.
-    >>> verifier = request.GET['oauth_verifier']
-    >>> request_token = Token(request_key, request_secret)
-    >>> request_token.set_verifier(verifier)
-    >>> api = ApiClient(consumer_key, consumer_secret)
-    >>> api.set_request_token(request_token)
-    >>> access_token = api.fetch_access_token()
-
-    You can now use the `api` object to make calls.
-
-    >>> api.get('top_up_history')
-
-    Note: if you don't want to use a redirect to your application's site, omit
-    the `callback` argument in the `fetch_request_token` call. The Mobile
-    Vikings API will then display the verification code to the user when access
-    has been granted.
-
-    Re-using an existing access token
-    ---------------------------------
-
-    Your application can re-use the access token once it has been acquired; you
-    need not go through the authorization process again. The token will stay
-    valid until the user explicitly revokes it.
-
-    >>> api = ApiClient(consumer_key, consumer_secret)
-    >>> api.set_access_token(access_token)
-    >>> api.get('sim_balance')
+    A list of available API methods, their parameters and return values
+    can be found here: https://mobilevikings.com/api/2.0/doc/
     """
     PROTOCOL = 'https'
     HOST = 'mobilevikings.com'
