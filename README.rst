@@ -26,23 +26,16 @@ Run the following command in the directory containing this ``README`` file::
 Calling the Mobile Vikings API
 ==============================
 
-Registering your application
-----------------------------
-
-Before you can call the Mobile Vikings API you should register your
-application. Send a request to mailto:info@mobilevikings.com. Don't forget to
-include the name of your application, a short description of its functionality
-and the username of your Mobile Vikings account. We will send you the consumer
-key and secret you need to initialize the API client.
-
-Testing the API
----------------
-
 The ``call.py`` file contains a sample implementation that calls the Mobile
 Vikings API using the OAuth client. To request the balance on a SIM card,
 for example, execute the following command::
 
     python call.py sim_balance add_price_plan=1
+
+You will be prompted for a consumer key and secret. These credentials can be
+found on your Mobile Vikings `account settings page`_.
+
+.. _`account settings page`: https://mobilevikings.com/account/settings/
 
 Visit the `API documentation`_ page for an overview of the available methods
 and their arguments.
@@ -52,8 +45,8 @@ and their arguments.
 If the `xAuth extension`_ has been enabled for your consumer, you can test it by
 passing the ``-x`` option to ``call.py``. You will be prompted for an account's
 username and password instead of being redirected to the Mobile Vikings site.
-Note that xAuth is not enabled by default. If you want to use it, email us at
-mailto:info@mobilevikings.com and explain why your application requires it.
+Note that xAuth is not enabled by default. If you're developing a mobile app
+and want to use it, email us at mailto:info@mobilevikings.com.
 
 .. _`xAuth extension`: https://dev.twitter.com/docs/oauth/xauth
 

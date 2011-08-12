@@ -40,11 +40,8 @@ class ApiClient(object):
         ``format``: output format of the API. Should be one of the following
             strings: 'json', 'xml', 'yaml', 'pickle'.
 
-        If you don't have a consumer key and secret yet and want to develop an
-        application that uses the Mobile Vikings API, send a request to
-        info@mobilevikings.com. Don't forget to include the name of your
-        application, a short description of its functionality and the username
-        of your Mobile Vikings account.
+        You can find the consumer key and secret on your account settings
+        page: https://mobilevikings.com/account/settings/
         """
         self.consumer = Consumer(consumer_key, consumer_secret)
         self.client = Client(self.consumer)

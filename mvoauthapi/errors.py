@@ -32,8 +32,8 @@ class AccessDenied(ApiServerError):
 
 class XAuthNotAllowed(ApiServerError):
     """ Application is not allowed to use the xAuth extension.
-        Send a request to info@mobilevikings.com if you are sure
-        you need this feature.
+        Send a request to info@mobilevikings.com if you need
+        this feature.
     """
     pass
 

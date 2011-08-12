@@ -50,9 +50,11 @@ def create_api_client_from(config_file, refresh=None, format=FORMAT,
         return raw_input('Please enter your %s %s: ' % (section, option))
 
     def write_config():
+        new_config = not os.path.exists(config_file)
         with open(config_file, 'wb') as fh:
             config.write(fh)
-        os.chmod(config_file, 0600)
+        if new_config:
+            os.chmod(config_file, 0600)
 
     config = ConfigParser()
     if os.path.isfile(config_file):
@@ -62,13 +64,14 @@ def create_api_client_from(config_file, refresh=None, format=FORMAT,
         if not config.has_section(section):
             config.add_section(section)
 
+    # Read consumer credentials.
     consumer_key = get_option('consumer', 'key', console_reader)
     consumer_secret = get_option('consumer', 'secret', console_reader)
     write_config()
 
     api = ApiClient(consumer_key, consumer_secret, format)
 
-    # Read consumer credentials.
+    # Read access token from config.
     if refresh is None and \
        config.has_option('access', 'key') and \
        config.has_option('access', 'secret'):
